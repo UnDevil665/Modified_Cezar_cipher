@@ -20,11 +20,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setupSignals()
 
     def setupSignals(self):
-        self.ui.shift_lineEdit.textChanged.connect(self.shiftChanged)
+        self.ui.key_lineEdit.textChanged.connect(self.shiftChanged)
 
         self.ui.encrypt_btn.clicked.connect(self.encrypt_BtnClicked)
 
-        self.ui.shift_lineEdit_2.textChanged.connect(self.shift_2Changed)
+        self.ui.key_lineEdit_2.textChanged.connect(self.shift_2Changed)
 
         self.ui.decrypt_btn.clicked.connect(self.decrypt_BtnPressed)
 
@@ -48,38 +48,38 @@ class MainWindow(QtWidgets.QMainWindow):
             widget.setStyleSheet('border: 1px solid black;')
 
     def encrypt_BtnClicked(self):
-        if self.ui.shift_lineEdit.text().isalpha():
-            self.get_error(self.ui.shift_lineEdit, False)
-            shift = self.ui.shift_lineEdit.text()
+        if self.ui.key_lineEdit.text().isalpha():
+            self.get_error(self.ui.key_lineEdit, False)
+            key = self.ui.key_lineEdit.text()
 
             if self.ui.text_textEdit.toPlainText() != "":
                 self.get_error(self.ui.text_textEdit, False)
                 text = self.ui.text_textEdit.toPlainText()
-                cipher = encrypt(shift, text)
+                cipher = encrypt(key, text)
                 self.ui.ciphertext_textEdit.setText(cipher)
             else:
                 self.ui.error_label.setText('Ошибка: введите текст')
                 self.get_error(self.ui.text_textEdit, True)
         else:
             self.ui.error_label.setText('Ошибка: ключом может быть только текст')
-            self.get_error(self.ui.shift_lineEdit, True)
+            self.get_error(self.ui.key_lineEdit, True)
 
     def decrypt_BtnPressed(self):
-        if self.ui.shift_lineEdit_2.text().isalpha():
-            self.get_error(self.ui.shift_lineEdit_2, False)
-            shift = self.ui.shift_lineEdit_2.text()
+        if self.ui.key_lineEdit_2.text().isalpha():
+            self.get_error(self.ui.key_lineEdit_2, False)
+            key = self.ui.key_lineEdit_2.text()
 
             if self.ui.ciphertext_textEdit_2.toPlainText() != "":
                 self.get_error(self.ui.ciphertext_textEdit_2, False)
                 cipher = self.ui.ciphertext_textEdit_2.toPlainText()
-                text = decrypt(shift, cipher)
+                text = decrypt(key, cipher)
                 self.ui.text_textEdit_2.setText(text)
             else:
                 self.ui.error_label.setText('Ошибка: введите текст')
                 self.get_error(self.ui.text_textEdit_2, True)
         else:
             self.ui.error_label.setText('Ошибка: ключом может быть только текст')
-            self.get_error(self.ui.shift_lineEdit_2, True)
+            self.get_error(self.ui.key_lineEdit_2, True)
 
 
 class UiMainWindow(object):
@@ -92,11 +92,11 @@ class UiMainWindow(object):
         self.text_label = QtWidgets.QLabel(self.tab_1)
         self.ciphertext_textEdit = QtWidgets.QTextEdit(self.tab_1)
         self.ciphertext_label = QtWidgets.QLabel(self.tab_1)
-        self.shift_lineEdit = QtWidgets.QLineEdit(self.tab_1)
+        self.key_lineEdit = QtWidgets.QLineEdit(self.tab_1)
         self.shift_label = QtWidgets.QLabel(self.tab_1)
         self.tab_2 = QtWidgets.QWidget()
         self.shift_label_2 = QtWidgets.QLabel(self.tab_2)
-        self.shift_lineEdit_2 = QtWidgets.QLineEdit(self.tab_2)
+        self.key_lineEdit_2 = QtWidgets.QLineEdit(self.tab_2)
         self.text_label_2 = QtWidgets.QLabel(self.tab_2)
         self.decrypt_btn = QtWidgets.QPushButton(self.tab_2)
         self.text_textEdit_2 = QtWidgets.QTextEdit(self.tab_2)
@@ -156,8 +156,8 @@ class UiMainWindow(object):
         self.ciphertext_label.setGeometry(QtCore.QRect(122, 165, 61, 16))
         self.ciphertext_label.setObjectName("ciphertext_label")
 
-        self.shift_lineEdit.setGeometry(QtCore.QRect(250, 10, 61, 20))
-        self.shift_lineEdit.setObjectName("shift_lineEdit")
+        self.key_lineEdit.setGeometry(QtCore.QRect(250, 10, 61, 20))
+        self.key_lineEdit.setObjectName("key_lineEdit")
 
         self.shift_label.setGeometry(QtCore.QRect(220, 10, 31, 16))
         self.shift_label.setObjectName("shift_label")
@@ -169,8 +169,8 @@ class UiMainWindow(object):
         self.shift_label_2.setGeometry(QtCore.QRect(220, 10, 31, 16))
         self.shift_label_2.setObjectName("shift_label_2")
 
-        self.shift_lineEdit_2.setGeometry(QtCore.QRect(250, 10, 61, 20))
-        self.shift_lineEdit_2.setObjectName("shift_lineEdit_2")
+        self.key_lineEdit_2.setGeometry(QtCore.QRect(250, 10, 61, 20))
+        self.key_lineEdit_2.setObjectName("key_lineEdit_2")
 
         self.text_label_2.setGeometry(QtCore.QRect(140, 165, 31, 16))
         font = QtGui.QFont()
@@ -226,11 +226,11 @@ class UiMainWindow(object):
         self.text_label.setText(_translate("mainwindow", "Text"))
         self.ciphertext_textEdit.setStatusTip(_translate("mainwindow", "Ciphertext Output Window"))
         self.ciphertext_label.setText(_translate("mainwindow", "Ciphertext"))
-        self.shift_lineEdit.setStatusTip(_translate("mainwindow", "Shift input field"))
-        self.shift_label.setText(_translate("mainwindow", "Shift"))
+        self.key_lineEdit.setStatusTip(_translate("mainwindow", "Key input field"))
+        self.shift_label.setText(_translate("mainwindow", "Key"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_1), _translate("mainwindow", "Encrypt"))
-        self.shift_label_2.setText(_translate("mainwindow", "Shift"))
-        self.shift_lineEdit_2.setStatusTip(_translate("mainwindow", "Shift input field"))
+        self.shift_label_2.setText(_translate("mainwindow", "Key"))
+        self.key_lineEdit_2.setStatusTip(_translate("mainwindow", "Key input field"))
         self.text_label_2.setText(_translate("mainwindow", "Text"))
         self.decrypt_btn.setText(_translate("mainwindow", "Decrypt"))
         self.text_textEdit_2.setStatusTip(_translate("mainwindow", "Decrypted text output window"))
