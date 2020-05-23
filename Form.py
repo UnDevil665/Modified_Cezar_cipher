@@ -38,21 +38,48 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.ciphertext_textEdit_2.setEnabled(True)
         self.ui.decrypt_btn.setEnabled(True)
 
-    def encrypt_BtnClicked(self):
-        if (self.ui.text_textEdit.toPlainText() != "") & (self.ui.shift_lineEdit.text() != ""):
-            text = self.ui.text_textEdit.toPlainText()
-            shift = int(self.ui.shift_lineEdit.text())
-            cipher = encrypt(shift, text)
+    def get_error(self, widget: QtWidgets, error: bool):
+        if error:
+            self.ui.statusbar.addWidget(self.ui.error_label)
+            widget.setStyleSheet('border: 1px solid red;')
+            widget.setFocus()
+        else:
+            self.ui.statusbar.removeWidget(self.ui.error_label)
+            widget.setStyleSheet('border: 1px solid black;')
 
-            self.ui.ciphertext_textEdit.setText(cipher)
+    def encrypt_BtnClicked(self):
+        if self.ui.shift_lineEdit.text().isalpha():
+            self.get_error(self.ui.shift_lineEdit, False)
+            shift = self.ui.shift_lineEdit.text()
+
+            if self.ui.text_textEdit.toPlainText() != "":
+                self.get_error(self.ui.text_textEdit, False)
+                text = self.ui.text_textEdit.toPlainText()
+                cipher = encrypt(shift, text)
+                self.ui.ciphertext_textEdit.setText(cipher)
+            else:
+                self.ui.error_label.setText('Ошибка: введите текст')
+                self.get_error(self.ui.text_textEdit, True)
+        else:
+            self.ui.error_label.setText('Ошибка: ключом может быть только текст')
+            self.get_error(self.ui.shift_lineEdit, True)
 
     def decrypt_BtnPressed(self):
-        if (self.ui.ciphertext_textEdit_2.toPlainText() != "") & (self.ui.shift_lineEdit_2.text() != ""):
-            cipher = self.ui.ciphertext_textEdit_2.toPlainText()
-            shift = int(self.ui.shift_lineEdit_2.text())
-            text = decrypt(shift, cipher)
+        if self.ui.shift_lineEdit_2.text().isalpha():
+            self.get_error(self.ui.shift_lineEdit_2, False)
+            shift = self.ui.shift_lineEdit_2.text()
 
-            self.ui.text_textEdit_2.setText(text)
+            if self.ui.ciphertext_textEdit_2.toPlainText() != "":
+                self.get_error(self.ui.ciphertext_textEdit_2, False)
+                cipher = self.ui.ciphertext_textEdit_2.toPlainText()
+                text = decrypt(shift, cipher)
+                self.ui.text_textEdit_2.setText(text)
+            else:
+                self.ui.error_label.setText('Ошибка: введите текст')
+                self.get_error(self.ui.text_textEdit_2, True)
+        else:
+            self.ui.error_label.setText('Ошибка: ключом может быть только текст')
+            self.get_error(self.ui.shift_lineEdit_2, True)
 
 
 class UiMainWindow(object):
@@ -76,7 +103,7 @@ class UiMainWindow(object):
         self.ciphertext_textEdit_2 = QtWidgets.QTextEdit(self.tab_2)
         self.ciphertext_label_2 = QtWidgets.QLabel(self.tab_2)
         self.statusbar = QtWidgets.QStatusBar(mainwindow)
-        self.validator = QtGui.QIntValidator()
+        self.error_label = QtWidgets.QLabel(self.tab_1)
 
     def setupUi(self, mainwindow):
         mainwindow.setObjectName("mainwindow")
@@ -129,11 +156,8 @@ class UiMainWindow(object):
         self.ciphertext_label.setGeometry(QtCore.QRect(122, 165, 61, 16))
         self.ciphertext_label.setObjectName("ciphertext_label")
 
-        self.validator.setRange(0, 32)
-
         self.shift_lineEdit.setGeometry(QtCore.QRect(250, 10, 61, 20))
         self.shift_lineEdit.setObjectName("shift_lineEdit")
-        self.shift_lineEdit.setValidator(self.validator)
 
         self.shift_label.setGeometry(QtCore.QRect(220, 10, 31, 16))
         self.shift_label.setObjectName("shift_label")
@@ -147,7 +171,6 @@ class UiMainWindow(object):
 
         self.shift_lineEdit_2.setGeometry(QtCore.QRect(250, 10, 61, 20))
         self.shift_lineEdit_2.setObjectName("shift_lineEdit_2")
-        self.shift_lineEdit_2.setValidator(self.validator)
 
         self.text_label_2.setGeometry(QtCore.QRect(140, 165, 31, 16))
         font = QtGui.QFont()
@@ -192,6 +215,8 @@ class UiMainWindow(object):
         self.retranslateUi(mainwindow)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(mainwindow)
+
+        self.error_label.setStyleSheet('color: red;')
 
     def retranslateUi(self, mainwindow):
         _translate = QtCore.QCoreApplication.translate
