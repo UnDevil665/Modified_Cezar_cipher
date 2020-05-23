@@ -1,6 +1,6 @@
 def encrypt(key: str, text: str) -> str:
     cipher = ""
-    rus = "абвгдежзийклмнопрстуфхцчшщъыьэюя"
+    rus = "абвгдежзийклмнопрстуфхцчшщъыьэюя "
 
     for i in range(0, len(text)):
         if text[i].lower() in rus:
