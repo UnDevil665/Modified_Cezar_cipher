@@ -1,68 +1,32 @@
-def encrypt(in_shift: int, text: str) -> str:
+def encrypt(key: str, text: str) -> str:
     cipher = ""
 
-    for i in text:
-        shift = in_shift
-        if (ord(i) >= ord('а')) & (ord(i) <= ord('я')):
-            shift %= 32
-            if ord(i) + shift > ord('я'):
-                cipher += (chr(ord(i) + shift - 32))
-            else:
-                cipher += (chr(ord(i) + shift))
-        elif (ord(i) >= ord('А')) & (ord(i) <= ord('Я')):
-            shift %= 32
-            if ord(i) + shift > ord('Я'):
-                cipher += (chr(ord(i) + shift - 32))
-            else:
-                cipher += (chr(ord(i) + shift))
-        elif (ord(i) >= ord('a')) & (ord(i) <= ord('z')):
-            shift %= 26
-            if ord(i) + shift > ord('z'):
-                cipher += (chr(ord(i) + shift - 26))
-            else:
-                cipher += (chr(ord(i) + shift))
-        elif (ord(i) >= ord('A')) & (ord(i) <= ord('Z')):
-            shift %= 26
-            if ord(i) + shift > ord('Z'):
-                cipher += (chr(ord(i) + shift - 26))
-            else:
-                cipher += (chr(ord(i) + shift))
+    for i in range(0, len(text)):
+        if(text[i] >= 'а') & (text[i] <= 'я'):
+            cipher += chr((ord(text[i]) + ord(key[i % len(key)]) - 2 * ord('а') + 1) % 32 + ord('а'))
+        elif (text[i] >= 'А') & (text[i] <= 'Я'):
+            cipher += chr((ord(text[i]) + ord(key[i % len(key)]) - 2 * ord('А') + 1) % 32 + ord('А'))
+        elif (text[i] >= 'a') & (text[i] <= 'z'):
+            cipher += chr((ord(text[i]) + ord(key[i % len(key)]) - 2 * ord('a') + 1) % 26 + ord('a'))
+        elif (text[i] >= 'A') & (text[i] <= 'Z'):
+            cipher += chr((ord(text[i]) + ord(key[i % len(key)]) - 2 * ord('A') + 1) % 26 + ord('A'))
         else:
-            cipher += i
-
+            cipher += text[i]
     return cipher
 
 
-def decrypt(in_shift: int, cipher: str) -> str:
+def decrypt(key: str, cipher: str) -> str:
     text = ""
 
-    for i in cipher:
-        shift = in_shift
-        if (ord(i) >= ord('а')) & (ord(i) <= ord('я')):
-            shift %= 32
-            if ord(i) - shift < ord('а'):
-                text += (chr(ord(i) - shift + 32))
-            else:
-                text += (chr(ord(i) - shift))
-        elif (ord(i) >= ord('А')) & (ord(i) <= ord('Я')):
-            shift %= 32
-            if ord(i) - shift < ord('А'):
-                text += (chr(ord(i) - shift + 32))
-            else:
-                text += (chr(ord(i) - shift))
-        elif (ord(i) >= ord('a')) & (ord(i) <= ord('z')):
-            shift %= 26
-            if ord(i) - shift < ord('a'):
-                text += (chr(ord(i) - shift + 26))
-            else:
-                text += (chr(ord(i) - shift))
-        elif (ord(i) >= ord('A')) & (ord(i) <= ord('Z')):
-            shift %= 26
-            if ord(i) - shift < ord('A'):
-                text += (chr(ord(i) - shift + 26))
-            else:
-                text += (chr(ord(i) - shift))
+    for i in range(0, len(cipher)):
+        if (cipher[i] >= 'а') & (cipher[i] <= 'я'):
+            text += chr((ord(cipher[i]) - ord(key[i % len(key)]) - 2 * ord('а') - 1) % 32 + ord('а'))
+        elif (cipher[i] >= 'А') & (cipher[i] <= 'Я'):
+            text += chr((ord(cipher[i]) - ord(key[i % len(key)]) - 2 * ord('А') - 1) % 32 + ord('А'))
+        elif (cipher[i] >= 'a') & (cipher[i] <= 'z'):
+            text += chr((ord(cipher[i]) - ord(key[i % len(key)]) - 2 * ord('a') - 1) % 26 + ord('a'))
+        elif (cipher[i] >= 'A') & (cipher[i] <= 'Z'):
+            text += chr((ord(cipher[i]) - ord(key[i % len(key)]) - 2 * ord('A') - 1) % 26 + ord('A'))
         else:
-            text += i
-
+            text += cipher[i]
     return text
